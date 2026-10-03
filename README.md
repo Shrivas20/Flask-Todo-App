@@ -23,25 +23,25 @@
                           │ HTTP/JSON  (same-origin)
                           ▼
 ┌───────────────────────────────────────────────────────────────┐
-│                  FastAPI Application (main.py)                 │
+│                  FastAPI Application (main.py)                │
 │                                                               │
-│  ┌─────────────┐  ┌───────────────────────────────────────┐  │
-│  │  Middleware  │  │              Routers                  │  │
-│  │─────────────│  │───────────────────────────────────────│  │
-│  │ CORS        │  │  /auth   → auth.py   (JWT auth)       │  │
-│  │ StaticFiles │  │  /       → todos.py  (CRUD todos)     │  │
-│  └─────────────┘  │  /users  → users.py  (profile/pw)     │  │
-│                   │  /admin  → admin.py  (admin ops)      │  │
-│                   └───────────────────────────────────────┘  │
+│  ┌─────────────┐  ┌───────────────────────────────────────┐   │
+│  │ Middleware  │  │              Routers                  │   │
+│  │─────────────│  │───────────────────────────────────────│   │
+│  │ CORS        │  │  /auth   → auth.py   (JWT auth)       │   │
+│  │ StaticFiles │  │  /       → todos.py  (CRUD todos)     │   │
+│  └─────────────┘  │  /users  → users.py  (profile/pw)     │   │
+│                   │  /admin  → admin.py  (admin ops)      │   │
+│                   └───────────────────────────────────────┘   │
 │                                ↕  SQLAlchemy ORM              │
 │  ┌─────────────────────────────────────────────────────────┐  │
-│  │            database.py  (SessionLocal, engine)           │  │
+│  │            database.py  (SessionLocal, engine)          │  │
 │  └──────────────────────────┬──────────────────────────────┘  │
 └─────────────────────────────┼─────────────────────────────────┘
                               ▼
               ┌───────────────────────────┐
               │     SQLite  (todos.db)    │
-              │   Tables: users · todos  │
+              │   Tables: users · todos   │
               └───────────────────────────┘
 ```
 
@@ -195,36 +195,6 @@ http://127.0.0.1:8000/redoc       ← ReDoc
 
 ---
 
-## 🚀 Production Hardening Checklist
-
-These are the gaps between this **learning project** and a true production backend:
-
-### 🔑 Security
-- [ ] Move `SECRET_KEY` to environment variable (`.env` + `python-dotenv`)
-- [ ] Use **PostgreSQL** instead of SQLite (use `DATABASE_URL` env var)
-- [ ] Set strict CORS origins (replace `allow_origins=["*"]`)
-- [ ] Add `ACCESS_TOKEN_EXPIRE_MINUTES` as configurable env var
-- [ ] Add **rate limiting** on `/auth/token` (e.g. `slowapi`)
-- [ ] Add **HTTPS** via reverse proxy (nginx / Caddy)
-
-### 🏗️ Architecture
-- [ ] Extract `get_db()` to a shared `dependencies.py` (currently duplicated in each router)
-- [ ] Add a `config.py` with Pydantic `BaseSettings` for all env vars
-- [ ] Add **Alembic** for database migrations instead of `create_all()`
-- [ ] Add **refresh tokens** alongside access tokens
-
-### 📦 Deployment
-- [ ] Add `requirements.txt` (`pip freeze > requirements.txt`)
-- [ ] Add `Dockerfile` + `docker-compose.yml`
-- [ ] Configure **Gunicorn** + **Uvicorn workers** for production
-- [ ] Add structured logging (replace `print` with `logging`)
-- [ ] Add `/health` endpoint for load balancer health checks
-
-### 🧪 Testing
-- [ ] Add `pytest` + `httpx` integration tests for all endpoints
-- [ ] Use an in-memory SQLite DB for test isolation
-
----
 
 ## 📚 Key Concepts Practiced
 
